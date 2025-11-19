@@ -1,3 +1,15 @@
+/etc/docker/daemon.json, добавив туда прокси-настройки.
+
+{
+  "proxies": {
+    "default": {
+      "httpProxy": "http://user:password@proxy-server:port",
+      "httpsProxy": "https://user:password@proxy-server:port",
+      "noProxy": "localhost,127.0.0.1,*.mydomain.com"
+    }
+  }
+}
+
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1.4.5 (GNU/Linux)
 
