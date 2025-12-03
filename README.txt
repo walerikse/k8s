@@ -1,3 +1,4 @@
+https://api.k8slens.dev/binaries/Lens%20Setup%202025.10.230725-latest.exe
 
 ZHMtdnRibnBmOmdkd05SSGsyR1VwS0ViWnpSTWlGdzhSQ3BlWXZaeFEw
 kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/calico.yaml
