@@ -1,4 +1,15 @@
- # Metallb address pool
+helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner
+
+
+Установите чарт, указав необходимые параметры:
+
+helm install nfs-subdir-external-provisioner \
+nfs-subdir-external-provisioner/nfs-subdir-external-provisioner \
+--set nfs.server=192.168.2.239 \
+--set nfs.path=/pvs/k8s \
+--set storageClass.onDelete=true
+
+# Metallb address pool
   apiVersion: metallb.io/v1beta1
   kind: IPAddressPool
   metadata:
