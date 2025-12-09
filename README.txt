@@ -1,3 +1,23 @@
+ # Metallb address pool
+  apiVersion: metallb.io/v1beta1
+  kind: IPAddressPool
+  metadata:
+    name: picluster-pool
+    namespace: metallb
+  spec:
+    addresses:
+    - 10.0.0.100-10.0.0.200
+
+  ---
+  # L2 configuration
+  apiVersion: metallb.io/v1beta1
+  kind: L2Advertisement
+  metadata:
+    name: example
+    namespace: metallb
+  spec:
+    ipAddressPools:
+    - picluster-pool
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/metallb.yaml
 # On first install only
