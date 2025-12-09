@@ -1,3 +1,6 @@
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm install ingress-nginx ingress-nginx/ingress-nginx --create-namespace -n ingress-nginx --set controller.service.loadBalancerIP=<Внешний IP>
+
 helm repo add metallb https://metallb.github.io/metallb
 helm install metallb metallb/metallb
 A values file may be specified on installation. This is recommended for providing configs in Helm values:
