@@ -1,3 +1,4 @@
+helm add datasapience https://registry.datasapience.ru/chartrepo/rsb --username=<Логин> --password=<ПАРОЛЬ
 https://api.k8slens.dev/binaries/Lens%20Setup%202025.10.230725-latest.exe
 https://github.com/MuhammedKalkan/OpenLens/releases/download/v6.5.2.286/OpenLens-6.5.2.286.exe
 ZHMtdnRibnBmOmdkd05SSGsyR1VwS0ViWnpSTWlGdzhSQ3BlWXZaeFEw
