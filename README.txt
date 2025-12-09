@@ -1,3 +1,6 @@
+
+helm repo add ds-rens https://registry.datasapience.ru/chartrepo/rens --username=ds-rens
+yj5uVtmm75NTSuW5mzpImbWOJtHxfrkz
 helm add datasapience https://registry.datasapience.ru/chartrepo/rsb --username=<Логин> --password=<ПАРОЛЬ
 https://api.k8slens.dev/binaries/Lens%20Setup%202025.10.230725-latest.exe
 https://github.com/MuhammedKalkan/OpenLens/releases/download/v6.5.2.286/OpenLens-6.5.2.286.exe
