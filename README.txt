@@ -1,4 +1,8 @@
+helm repo add metallb https://metallb.github.io/metallb
+helm install metallb metallb/metallb
+A values file may be specified on installation. This is recommended for providing configs in Helm values:
 
+helm install metallb metallb/metallb -f values.yaml
 helm repo add ds-rens https://registry.datasapience.ru/chartrepo/rens --username=ds-rens
 yj5uVtmm75NTSuW5mzpImbWOJtHxfrkz
 helm add datasapience https://registry.datasapience.ru/chartrepo/rsb --username=<Логин> --password=<ПАРОЛЬ
