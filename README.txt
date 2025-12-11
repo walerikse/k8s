@@ -1,3 +1,22 @@
+vi smb-test-pod.yaml
+Copy
+apiVersion: v1
+kind: Pod
+metadata:
+  name: smb-test-pod
+spec:
+  containers:
+  - name: app
+    image: busybox
+    command: [ "sh", "-c", "echo 'Hello from Kubernetes PVC' > /mnt/smb/hello.txt; sleep 3600" ]
+    volumeMounts:
+    - mountPath: "/mnt/smb"
+      name: smb-volume
+  volumes:
+  - name: smb-volume
+    persistentVolumeClaim:
+      claimName: smb-pvc
+
 vi smb-pvc.yaml
 Copy
 apiVersion: v1
