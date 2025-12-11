@@ -1,3 +1,10 @@
+helm repo add openebs https://openebs.github.io/charts
+helm repo update
+
+
+Установите Helm chart и передайте ему необходимые переменные и имя неймспейса:
+
+helm install --namespace openebs openebs openebs/openebs --set localprovisioner.basePath=/pvs/openebs
 vi smb-test-pod.yaml
 Copy
 apiVersion: v1
