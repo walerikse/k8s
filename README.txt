@@ -1,3 +1,33 @@
+helm repo add csi-driver-smb https://raw.githubusercontent.com/kubernetes-csi/csi-driver-smb/master/charts
+helm repo update
+helm install csi-driver-smb csi-driver-smb/csi-driver-smb --namespace kube-system
+vi smb-secret.yaml
+Copy
+apiVersion: v1
+kind: Secret
+metadata:
+  name: smb-secret
+  namespace: default
+type: Opaque
+data:
+  username: azhzLXNhbWJh
+  password: bXktc2VjdXJlLXB3
+vi smb-storageclass.yaml
+Copy
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: smb-csi
+provisioner: smb.csi.k8s.io
+parameters:
+  source: "//192.168.30.90/k8s-share"  # Define Samba share
+  csi.storage.k8s.io/node-stage-secret-name: "smb-secret" # Define Samba credential secret
+  csi.storage.k8s.io/node-stage-secret-namespace: "default" # Define Samba credential secret namespace
+mountOptions:
+  - dir_mode=0777
+  - file_mode=0777
+  - vers=3.0  # Define Samba version
+reclaimPolicy: Delete
 helm install my-release oci://registry-1.docker.io/bitnamicharts/keycloak
 
 https://files.pythonhosted.org/packages/70/8e/0e2d847013cb52cd35b38c009bb167a1a26b2ce6cd6965bf26b47bc0bf44/requests-2.31.0-py3-none-any.whl
