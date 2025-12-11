@@ -1,3 +1,16 @@
+vi smb-pvc.yaml
+Copy
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: smb-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: smb-csi
+  resources:
+    requests:
+      storage: 1Gi
 helm repo add csi-driver-smb https://raw.githubusercontent.com/kubernetes-csi/csi-driver-smb/master/charts
 helm repo update
 helm install csi-driver-smb csi-driver-smb/csi-driver-smb --namespace kube-system
