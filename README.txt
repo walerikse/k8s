@@ -1,3 +1,8 @@
+
+Postgres OS - postgres - lUNnISmDDIUWKDHU6RSH
+
+
+Postgres СУБД - postgres - OyKKLPQTuX7G77nlvvNj
 helm repo add openebs https://openebs.github.io/charts
 helm repo update
 
