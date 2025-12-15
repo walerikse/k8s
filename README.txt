@@ -1,4 +1,5 @@
-
+annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
 Postgres OS - postgres - lUNnISmDDIUWKDHU6RSH
 
 
