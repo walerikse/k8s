@@ -1,3 +1,4 @@
+https://github.com/kaikramer/keystore-explorer/releases/download/v5.6.0/kse-560.zip
 persistentVolumes:
     - name: nginx-config
       mountPath: "/etc/nginx/templates/default.conf.template"
