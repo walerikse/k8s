@@ -1,3 +1,35 @@
+persistentVolumes:
+    - name: nginx-config
+      mountPath: "/etc/nginx/templates/default.conf.template"
+      subPath: "default.conf.template"
+
+  init:
+    containers:
+    - name: "nginx-config"
+      image:
+        repository: "cloud-registry.kapitalbank.az/baseimages/alphyn/busybox"
+        tag: "1.36.1"
+      imagePullPolicy: IfNotPresent
+      command:
+        - /bin/sh
+        - -c
+      args:
+        - |
+          cat <<\EOF > /nginx-config/default.conf.template
+          server {
+              listen       8080;
+              server_name  localhost;
+
+              location /apps/bf {
+                  alias   /usr/share/nginx/html;
+                  index  index.html index.htm;
+              }
+
+              error_page   500 502 503 504  /50x.html;
+              location = /50x.html {
+                  root   /usr/share/nginx/html;
+              }
+          }
 annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 Postgres OS - postgres - lUNnISmDDIUWKDHU6RSH
