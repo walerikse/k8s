@@ -1,3 +1,10 @@
+- name: JAVAX_NET_SSL_TRUST_STORE_PASSWORD
+      secret: truststore-ingress
+      key: password
+
+    - name: _JAVA_OPTIONS
+      value: >-
+        -Djavax.net.ssl.trustStore=/opt/ssl/truststore.jks
 https://github.com/kaikramer/keystore-explorer/releases/download/v5.6.0/kse-560.zip
 persistentVolumes:
     - name: nginx-config
