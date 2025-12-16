@@ -1,3 +1,13 @@
+https://registry.npmjs.org/@alebcay/openlens-node-pod-menu/-/openlens-node-pod-menu-0.1.2.tgz
+
+- name: ingress-tls-volume
+      mountPath: /opt/ssl/truststore.jks
+      subPath: truststore.jks
+      secretName: truststore-ingress
+      items:
+        - key: truststore.jks
+          path: truststore.jks  
+
 - name: JAVAX_NET_SSL_TRUST_STORE_PASSWORD
       secret: truststore-ingress
       key: password
