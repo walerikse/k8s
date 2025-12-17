@@ -1,4 +1,42 @@
-https://registry.npmjs.org/@alebcay/openlens-node-pod-menu/-/openlens-node-pod-menu-0.1.2.tgz
+Установка CSI-драйвера для Samba
+Для установки драйвера нужен пакетный менеджер helm.
+
+Скачайте пакетный менеджер helm chart и CSI-драйвер с GitHub Kubernetes CSI.
+
+Установите последнюю версию драйвера
+
+helm repo add csi-driver-smb https://raw.githubusercontent.com/kubernetes-csi/csi-driver-smb/master/charts
+
+helm install csi-driver-smb csi-driver-smb/csi-driver-smb --namespace kube-system --version v1.4.0
+
+Проверьте, что поды установлены и запущены:
+
+kubectl --namespace=kube-system get pods --selector="app=csi-smb-controller"
+
+Создание секрета для доступа к SMB ресурсу
+Создайте секрет для хранения логина и пароля на сервере SMB (по умолчанию guest/guest)
+
+kubectl create secret generic smbcreds --from-literal username=user1 --from-literal password=PassWord
+
+Создать манифест для StorageClass
+nano ./sfs_storage_class.yaml
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: smb
+provisioner: smb.csi.k8s.io
+parameters:
+  source: "//192.168.1.1/share/code"
+  csi.storage.k8s.io/provisioner-secret-name: "smbcreds"
+  csi.storage.k8s.io/provisioner-secret-namespace: "default"
+  csi.storage.k8s.io/node-stage-secret-name: "smbcreds"
+  csi.storage.k8s.io/node-stage-secret-namespace: "default"
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+mountOptions:
+  - dir_mode=0777
+  - file_mode=0777
 
 - name: ingress-tls-volume
       mountPath: /opt/ssl/truststore.jks
