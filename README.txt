@@ -1,3 +1,5 @@
+helm repo add superset http://apache.github.io/superset/
+
 Установка CSI-драйвера для Samba
 Для установки драйвера нужен пакетный менеджер helm.
 
