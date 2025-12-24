@@ -1,3 +1,16 @@
+- name: BATCHFLOW_API_VERIFY_SSL
+    value: "false"
+  - name: BATCHFLOW_AUTH_VERIFY_SSL
+    value: "false"
+  - name: BATCHFLOW_API_URL
+    value: "http://ocms-batch-flow-backend.d0-ocms-general.svc.cluster.local:8080/bfapi/"
+  - name: BATCHFLOW_AUTH_URL
+    value: "https://hj/realms/cmocean/protocol/openid-connect/token"
+  - name: CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP
+    value: "true"
+  - name: AIRFLOW_CONN_CMOCEAN_BATCHFLOW_API
+    value: '{"conn_type":"cmocean-batchflow","login":"batchflow","password":"jxlwjZyJesdwF8Dg2dLU3xwlYKMA8hag"}'
+
 extraVolumes:
 
   - name: dags
