@@ -1,3 +1,33 @@
+extraVolumes:
+
+  - name: dags
+    emptyDir: {}
+
+
+initContainers:
+  - name: copy-dags
+    image: harbor.atb.su/ocms-docker-release/ocms-batch-flow-airflow:25.0.4
+    pullPolicy: IfNotPresent
+    pullSecrets: ["harbor-cd", "harbor-ci"]
+    command: [sh, -c]
+    args:
+      - |
+        ls -l /opt/bitnami/airflow/dags/  
+        cp -r /dags/* /opt/bitnami/airflow/dags/
+        #chmod -R 777 /opt/bitnami/airflow/dags
+    volumeMounts:
+      - name: dags
+        mountPath: /opt/bitnami/airflow/dags
+
+
+extraVolumeMounts:
+  - name: airflow-config
+    mountPath: /opt/bitnami/airflow/config
+    readOnly: true
+  - name: dags
+    mountPath: /opt/bitnami/airflow/dags
+    readOnly: false
+
 helm repo add superset http://apache.github.io/superset/
 
 Установка CSI-драйвера для Samba
