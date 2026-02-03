@@ -1,3 +1,131 @@
+extraSecretEnv:
+  SUPERSET_SECRET_KEY: thisISaSECRET_1234
+ 
+configOverrides:
+  feature_flags: |
+    FEATURE_FLAGS = {
+      # ролевая модель для дашбордов
+      "DASHBOARD_RBAC": True,
+    }
+  cmo_settings: |
+    ENABLE_PROXY_FIX = True
+    TALISMAN_ENABLED = False
+    ENABLE_CORS = True
+    HTTP_HEADERS={"X-Frame-Options":"ALLOWALL"}
+    SUPERSET_WEBSERVER_TIMEOUT = 60 * 5
+     
+    # LOGOUT_REDIRECT_URL = f'https://<keycloak_url>/auth/realms/{keycloak_realm}/protocol/openid-connect/logout?post_logout_redirect_uri=<superset_url>&client_id={os.environ.get("CUSTOM_CLIENT_ID")}'
+ 
+ingress:
+  annotations:
+    # Увеличение таймаутов для долго загружающихся дашбордов
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+ 
+# рекомендованные минимальные ресурсы для superset
+supersetNode:
+  resources:
+    requests:
+      cpu: 500m
+      memory: 256Mi
+    limits:
+      cpu: 1
+      memory: 512Mi
+ 
+supersetWorker:
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1.5Gi
+    limits:
+      cpu: 1
+      memory: 2.5Gi
+Настройка интеграции с Keycloak
+Для настройки интеграции c Keycloak необходимо добавить следующие настройки
+
+Интеграция Keycloak
+extraEnv:
+  # client_id используемый для получения ролей пользователя
+  CUSTOM_CLIENT_ID: superset-bf
+ 
+# добавить
+extraSecretEnv:
+  KEYCLOAK_CLIENT_SECRET: secret1234
+ 
+configOverrides:
+  kecloak_support: |
+    from flask_appbuilder.const import AUTH_OAUTH
+    import logging
+ 
+    AUTH_TYPE = AUTH_OAUTH
+    realm = os.environ.get("KEACLOAK_REAML")
+    OAUTH_PROVIDERS = [{
+      'name': 'keycloak',
+      'token_key': 'access_token',
+      'icon': 'fa-key',
+      'remote_app': {
+        'client_id': os.environ.get('CUSTOM_CLIENT_ID'),
+        'client_secret': os.environ.get('KEYCLOAK_CLIENT_SECRET'),
+        'api_base_url': f'https://<keycloak_url>/auth/realms/{realm}/protocol/openid-connect/*',
+        'client_kwargs': {
+            'scope': 'openid email profile',
+        },
+        'access_token_url': f'https://<keycloak_url>/auth/realms/{realm}/protocol/openid-connect/token',
+        'authorize_url': f'https://<keycloak_url>/auth/realms/{realm}/protocol/openid-connect/auth',
+        'userinfo_uri': f'https://<keycloak_url>/auth/realms/{realm}/protocol/openid-connect/userinfo',
+        'jwks_uri': f'https://<keycloak_url>/auth/realms/{realm}/protocol/openid-connect/certs',
+      }
+    }]
+ 
+    from superset.security import SupersetSecurityManager
+ 
+    class CustomSsoSecurityManager(SupersetSecurityManager):
+      def oauth_user_info(self, provider, response=None):
+        logging.debug("Oauth2 provider: {0}.".format(provider))
+        if provider == 'keycloak':
+          me = self.appbuilder.sm.oauth_remotes[provider].get('userinfo').json()
+          try:
+            roles = me['resource_access'][os.environ.get('CUSTOM_CLIENT_ID')]['roles']
+          except KeyError:
+            roles = []
+          logging.debug("user_data: {0}".format(me))
+          return {'name': me['name'], 'email': me['email'],
+                  'id': me['preferred_username'],
+                  'username': me['preferred_username'],
+                  'first_name': me['given_name'], 'last_name': me['family_name'],
+                  'role_keys': roles}
+ 
+    CUSTOM_SECURITY_MANAGER = CustomSsoSecurityManager
+ 
+    # обновление ролей при каждом логине
+    AUTH_ROLES_SYNC_AT_LOGIN = True
+    # маппинг ролей из Keycloak'а на роли в Superset
+    AUTH_ROLES_MAPPING = {
+      'Admin': ['Admin'],
+      'Alpha': ['Alpha'],
+      'Gamma': ['Gamma'],
+      'sql_lab': ['sql_lab'],
+      'Public': ['Public'],
+    }
+ 
+    # авторегистрация при первом логине
+    AUTH_USER_REGISTRATION = True
+    # по умолчанию всем дается роль Public
+    AUTH_USER_REGISTRATION_ROLE = "Public"
+ 
+    # нужно для больших cookie, чтобы работала авторизация
+    from redis import Redis
+    SESSION_SERVER_SIDE = True
+    SESSION_TYPE = 'redis'
+    SESSION_REDIS = Redis(host="superset-redis-headless", port=6379, db=1)
+ 
+# загрузка необходимых библиотек для авторизации в keycloak
+bootstrapScript: |
+  #!/bin/bash
+  rm -rf /var/lib/apt/lists/* && \
+  pip install --no-cache-dir \     Authlib==1.3.2 psycopg2-binary==2.9.10 Flask-Cors==5.0.1 && \
+  if [ ! -f ~/bootstrap ]; then echo "Running Superset with uid {{ .Values.runAsUser }}" > ~/bootstrap; fi
 - name: BATCHFLOW_API_VERIFY_SSL
     value: "false"
   - name: BATCHFLOW_AUTH_VERIFY_SSL
