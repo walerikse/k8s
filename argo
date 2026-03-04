@@ -1,3 +1,5 @@
+https://dl.k8s.io/release/v1.35.0/bin/windows/amd64/kubectl.exe
+https://get.helm.sh/helm-v4.1.1-windows-amd64.zip
 helm plugin install https://github.com/jkroepke/helm-secrets --version v4.6.1
 
 quay.io/argoproj/argocd:v3.2.5
