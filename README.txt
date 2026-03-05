@@ -1,3 +1,9 @@
+mountOptions:
+  - guest
+  - noperm  # don't check permissions at client side
+  - mfsymlinks  # allow symlinks
+  - cache=strict  # use a cache strategy which assures coherency when multiple clients access the same data
+  - noserverino  # required to prevent data corruption
 helm repo add csi-driver-smb https://raw.githubusercontent.com/kubernetes-csi/csi-driver-smb/master/charts
 helm install csi-driver-smb csi-driver-smb/csi-driver-smb --namespace csi-driver-smb --create-namespace
 
