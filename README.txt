@@ -1,3 +1,6 @@
+helm repo add csi-driver-smb https://raw.githubusercontent.com/kubernetes-csi/csi-driver-smb/master/charts
+helm install csi-driver-smb csi-driver-smb/csi-driver-smb --namespace csi-driver-smb --create-namespace
+
 Zwm^CVj2XhDa/Q83
 extraSecretEnv:
   SUPERSET_SECRET_KEY: thisISaSECRET_1234
