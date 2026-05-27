@@ -1,3 +1,25 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: xz-route
+  namespace: xz-namespace
+spec:
+  parentRefs:
+    - name: eg
+      namespace: envoy-gateway-system
+      sectionName: https-default
+  hostnames:
+    - xz.domain.ru
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: xz-kakoy-svc
+          port: 8080
+
 helm upgrade --install eg oci://docker.io/envoyproxy/gateway-helm --create-namespace --namespace envoy-gateway-system --version v1.7.1 --rollback-on-failure --wait 
 kubectl apply -f gateway.yaml
 mountOptions:
