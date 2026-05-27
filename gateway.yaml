@@ -5,11 +5,16 @@ metadata:
   name: eg
 spec:
   controllerName: gateway.envoyproxy.io/gatewayclass-controller
+  parametersRef: # Связующее звено
+    group: config.gateway.envoyproxy.io
+    kind: EnvoyProxy
+    name: custom-envoy-proxy # Имя вашего манифеста EnvoyProxy
+    namespace: envoy-gateway-system
 ---
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: EnvoyProxy
 metadata:
-  name: eg-custom-ip
+  name: custom-envoy-proxy
   namespace: envoy-gateway-system
 spec:
   provider:
