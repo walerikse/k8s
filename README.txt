@@ -1,3 +1,5 @@
+helm upgrade --install eg oci://docker.io/envoyproxy/gateway-helm --create-namespace --namespace envoy-gateway-system --version v1.7.1 --rollback-on-failure --wait 
+kubectl apply -f gateway.yaml
 mountOptions:
   - guest
   - noperm  # don't check permissions at client side
